@@ -3,21 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Flickrbook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="siteName">
-        <p>Flickr</p>
-       
-    </main>
-    <form id="photos_search_form">
-        <input type="text" placeholder="Search.." id="query" value="flowers">
-        <button id="submit-button">Submit</button>
-    </form>
-    <section class="allImages"></section>
+    <header class=container>
+        <section class="row">
+            <section class="col s12">
+                <h3>Flickrbook Photo Application</h3>
+                <p><i>we keep you connected photographically</i></p>
+            </section>
+        </section>
+    </header>
+    <main class="container">
+            <section class="row">
+                <section class="col s12">
+                    <form id="photos_search_form">
+                        <section class="row">
+                            <section class="col s10">
+                                <input type="text" placeholder="Search.." id="query" value="flowers">
+                            </section>
+                            <section class="col s2">
+                                <button id="submit-button" class="waves-effect waves-light btn-small "><i class="material-icons left">search</i></button>
+                            </section>
+                        </section>
+                    </form>
+                </section>
+            </section>
+            <section class="row">
+                <section class="col s12">
+                    <p class="results"></p>
+                    <p>
+                        <button class="btn first" onclick="firstPage(); return false;">First</button>
+	                    <button class="btn next" onclick="nextPage(); return false;" >Next</button>
+	                    <button class="btn previous" onclick="prevPage(); return false;" >Previous</button>
+	                    <button class="btn last" onclick="lastPage(); return false;">Last</button>
+                    </p>
+                    <p class="pagnition">
 
-    <script src="index.js"></script>
+                    </p>
+                </section>
+            </section>
+            <section class="row allImages">
+                
+            </section>
+    </main>
+
+    <script src="js/index.js"></script>
 </body>
 
 </html>
