@@ -2,14 +2,14 @@
 const APIkey = 'a498e6e237c5d3a3c29ab672a224df95';
 
 // Flickr format to URL
-var format = '&format=json&nojsoncallback=1'; 
+var format = '&is_commons=1&format=json&nojsoncallback=1'; 
 var photos = 0;
 
 // Gallery json object - NB. its not it use apparently, but its meant to create a navigation on the model popup
 const gallery = [{}];
 
 // Pagnition
-var currentPage = 5;
+var currentPage = 1;
 
 // How many items to show on the page after a search
 var numberOfItemsPerPage = 5; // default
@@ -62,7 +62,6 @@ async function apiRequest(_method, ..._params)
     const apiParams = params.join('');
     try {
       const url = `https://api.flickr.com/services/rest/?method=${_method}&api_key=${APIkey}${apiParams}${format}`;
-      console.log(url);
       const flickrApi = await fetch(url);
 
       const data = await flickrApi.json();
@@ -211,14 +210,12 @@ async function apiRequest(_method, ..._params)
     // When the onkeyup event is fired on the textbox
     document.querySelector('#query').addEventListener('keyup', (x) => {
       searchTermGlobal = document.querySelector('#query').value;
-      console.log(searchTermGlobal);
     });
 
     document.querySelector('#sortItems').selectedIndex = 0;
     // When the sort items has changed
     document.querySelector('#sortItems').addEventListener('change', (x) => {
       sortBy = document.querySelector('#sortItems').value;
-      console.log(sortBy);
     });
 
     document.querySelector('#photos_search_form')
