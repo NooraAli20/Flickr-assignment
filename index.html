@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flickrbook</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" media="screen,projection">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class=container>
+    <header>
         <section class="row">
-            <section class="col s12">
+            <section class="col s12 center-align">
                 <h3>Flickrbook Photo Application</h3>
                 <p><i>we keep you connected photographically</i></p>
             </section>
@@ -21,12 +21,45 @@
             <section class="row">
                 <section class="col s12">
                     <form id="photos_search_form">
+                        <section class="row ">
+                            <section class="input-field col s6">
+                                <select id="itemsPerPage">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select>
+                                <label class="blue-text text-darken-6">Items per page</label>
+                            </section>
+                            <section class="input-field col s6">
+                                    <select id="searchBy" multiple>
+                                        <option value="tag" selected>Tag</option>
+                                        <option value="text">Text</option>
+                                    </select>
+                                    <label class="blue-text text-darken-6">Search By</label>
+                            </section>
+                        </section>
+                        <section class="row">
+                            <section class="input-field col s12">
+                                <select name="" id="sortItems" class="sort">
+                                    <option value="date-posted-desc" selected>Date posted descending</option>
+                                    <option value="date-posted-asc">Date posted ascending</option>
+                                    <option value="date-taken-asc">Date taken ascending</option>
+                                    <option value="date-taken-desc">Date taken descending</option>
+                                    <option value="interestingness-desc">Interestingness descending</option>
+                                    <option value="interestingness-asc">Interestingness ascending</option>
+                                    <option value="relevance">Relevance</option>
+                                </select>
+                                <label class="blue-text text-darken-6">Sort results by</label>
+                            </section>
+                        </section>
                         <section class="row">
                             <section class="col s10">
+                                <label class="blue-text text-darken-6">Choose a search word</label>
                                 <input type="text" placeholder="Search.." id="query" value="flowers">
                             </section>
                             <section class="col s2">
-                                <button id="submit-button" class="waves-effect waves-light btn-small "><i class="material-icons left">search</i></button>
+                                <button id="submit-button" class="waves-effect waves-light btn-small btn-floating pulse"><i class="material-icons left">search</i></button>
                             </section>
                         </section>
                     </form>
@@ -35,7 +68,7 @@
             <section class="row">
                 <section class="col s12">
                     <p class="results"></p>
-                    <p>
+                    <p class="pagnition_nav center-align">
                         <button class="btn first" onclick="firstPage(); return false;">First</button>
 	                    <button class="btn next" onclick="nextPage(); return false;" >Next</button>
 	                    <button class="btn previous" onclick="prevPage(); return false;" >Previous</button>
@@ -47,10 +80,27 @@
                 </section>
             </section>
             <section class="row allImages">
-                
+
+            </section>
+              <!-- Modal Structure -->
+            <section id="modal1" class="modal">
+                <section class="modal-content">
+                    <section class="row">
+                        <section class="col s12 emage center-align">
+
+                        </section>
+                    </section>
+                </section>
+                <section class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                </section>
             </section>
     </main>
+    <footer class="page-footer">
 
+    </footer>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="js/index.js"></script>
 </body>
 
