@@ -24,7 +24,10 @@ var searchTermGlobal = '';
 var sortBy = 'date-posted-desc';      // default = date-posted-desc
 
 // To hold an array of what to search for on the Flickr API i.e. ['text', 'tag'],
-var searchTermSelections = ['tag'];
+var searchTermSelections = ['text'];
+
+// Information about a specific image
+var imageInfo = {};
 
 /* -------------------  start Pagnition functions ----------------------  */
 function nextPage(){
@@ -79,20 +82,56 @@ async function apiRequest(_method, ..._params)
   // In this function, we initiate the search functionality to the Flickr API using the flickr.photos.search method.
   function search(searchTerm)
   {
+
+    // Check if the user provided a search Term
+    if(!searchTerm)
+    {
+      // Get the instance of the model2
+      var instance = M.Modal.getInstance(document.querySelector('.modal2'));
+
+      // Get the instance of the paragraph tag therein
+      var paragraphH4 = document.querySelector('.show');
+      paragraphH4.innerHTML = ''
+      paragraphH4.innerHTML = "Search term must be provided";
+
+      instance.open();
+
+      document.querySelector('.validate').focus();
+
+      return;
+    }
+
+    // Check if the user provided search by terms, i.e tag or text
+    if(searchTermSelections.length == 0)
+    {
+      var instance = M.Modal.getInstance(document.querySelector('.modal2'));
+
+      var paragraphH4 = document.querySelector('.show');
+      paragraphH4.innerHTML = ''
+      paragraphH4.innerHTML = "Search by term must be provided<br> It should be either Tag or Text";
+
+      //instance.open();
+
+      document.querySelector('#searchBy').size = 2;
+      //return;
+    }
+    
+
     // Not that flickr.photos.search always returns back an album of photos, so we are supposed to 
     // loop through the album, photo by photo, with the flickr.photos.getInfo and flickr.photos.getSizes API endpoints
     // to get both information on each and every individual photo thats contained in the album
+    var searchByTagOrAndText = searchTermSelections.includes('tag') ? `&tags=${searchTerm}` : '';
+      searchByTagOrAndText += searchTermSelections.includes('text') ? `&text=${searchTerm}` : '';
+
     apiRequest(
-       
         `flickr.photos.search`,
-        `&tags=${searchTermSelections.includes('tag') ? searchTerm : ''}`, 
-        `&text=${searchTermSelections.includes('text') ? searchTerm : ''}`,
         '&per_page=' + numberOfItemsPerPage, 
         '&safe_search=3',
         '&sort=' + sortBy,
         '&content_type=1',
+        `&is_gallery=true`,
         '&page=' + currentPage,
-        '&extras=[\'url_q\',\'url_m\']'
+        searchByTagOrAndText
       ).then((res) => {
 
           const photos = res.photos.photo;
@@ -124,7 +163,7 @@ async function apiRequest(_method, ..._params)
                   .then((imageInfoResponse) => {
 
                     // We build an imageInfo json object that contains all the necessary information that we think we might need to display
-                    var imageInfo = { 
+                    imageInfo = { 
                       photoId : p.id,
                       ownerName : imageInfoResponse.photo.owner.username,
                       realName : imageInfoResponse.photo.owner.realname,
@@ -142,18 +181,18 @@ async function apiRequest(_method, ..._params)
                       })
                     }
 
-                    // This object is going to be used to build a navigation on the model popup
-                    gallery.push({
-                      "id": imageId,
-                      "imageId": p.id,
-                      "imageURL" : imageUrl[1].source,
-                      "imageInfo" : imageInfo
-                    });
-
                     // we call a custom method to render the image onto the canvas
                     createAndRenderImageFromFlickr(imageUrl, imageInfo);
 
                     imageId++;
+                });
+
+                // This object is going to be used to build a navigation on the model popup
+                gallery.push({
+                  "id": imageId,
+                  "imageId": p.id,
+                  "imageURL" : imageUrl[1].source,
+                  "imageInfo" : imageInfo
                 });
               });
           });
@@ -230,13 +269,7 @@ async function apiRequest(_method, ..._params)
         // We grab the search term from the input field of the form
         var searchInput = document.querySelector('#query').value;
 
-        // If we haven't provided a seach term, 
-        if(!searchInput) {
-            // TODO : Change the console.log into something more user friendly to show the user that they havent provided a search term
-            console.log('No search term provided');
-        }else{
-            search(searchInput);
-        }     
+        search(searchInput);
     });
 
   });
@@ -249,9 +282,17 @@ async function apiRequest(_method, ..._params)
       const options = { onCloseStart: () => {}};
     
       var elems = document.querySelectorAll('select');
-      var instances = M.FormSelect.init(elems, options);
+      var instances = M.FormSelect.init(elems);
 
-      elems = document.querySelectorAll('.modal');
+      elems = document.querySelector('.modal2');
+      instances = M.Modal.init(elems, {
+        dismissible: false,
+        startingTop: '50%',
+        endingTop: '10%',
+        opacity : 0.9
+      });
+
+      elems = document.querySelector('.modal1');
       instances = M.Modal.init(elems, {
         onOpenStart: function(){
 
@@ -266,12 +307,12 @@ async function apiRequest(_method, ..._params)
             img.setAttribute('src', result.imageURL);
 
             modelContent.appendChild(img);
-          },
-          onCloseEnd: function(){
+        },
+        onCloseEnd: function(){
             var modelContent = document.querySelector('.emage');
             modelContent.innerHTML = '';
-          },
-          preventScrolling: true,
-          opacity : 0.9
-        });
+        },
+        preventScrolling: true,
+        opacity : 0.9
+      });
 });
